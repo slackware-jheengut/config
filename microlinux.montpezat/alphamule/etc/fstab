@@ -8,7 +8,8 @@ proc             /proc            proc        defaults         0   0
 tmpfs            /dev/shm         tmpfs       defaults         0   0
 
 # Home
-nestor:/home /home nfs rsize=8192,wsize=8192,timeo=14,intr 0 0
+#nestor:/home /home nfs rsize=8192,wsize=8192,timeo=14,intr 0 0
+nestor:/home /home nfs defaults 0 0
 
 # Web
 nestor:/var/www/vhosts /Web nfs rsize=8192,wsize=8192,timeo=14,intr 0 0
