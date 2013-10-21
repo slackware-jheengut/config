@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Put the command line options here that you want to pass to dhcpd:
-DHCPD_OPTIONS="-q eth0"
+DHCPD_OPTIONS="-q eth1"
 
 [ -x /usr/sbin/dhcpd ] || exit 0
 

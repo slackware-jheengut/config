@@ -16,6 +16,7 @@ ip_forward_start() {
   if [ -f /proc/sys/net/ipv4/ip_forward ]; then
     echo "Activating IPv4 packet forwarding."
     echo 1 > /proc/sys/net/ipv4/ip_forward
+    /usr/sbin/iptables -t nat -A POSTROUTING -o eth0 -s 192.168.2.0/24 -j MASQUERADE
     # Changing /proc/sys/net/ipv4/ip_forward results in resetting all
     # non-default ipv4 parameters for the interface as mentioned in
     # /usr/src/linux/Documentation/networking/ip-sysctl.txt.  So, we

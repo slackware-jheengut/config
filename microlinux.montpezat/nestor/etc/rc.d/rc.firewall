@@ -3,8 +3,8 @@
 # /etc/rc.d/rc.firewall
 
 IPT=$(which iptables)
-#IFACE_INET=eth0
-IFACE_LAN=eth0
+IFACE_INET=eth0
+IFACE_LAN=eth1
 
 function start {
 	
@@ -52,6 +52,9 @@ function start {
 	# HTTP local
 	$IPT -A INPUT -p tcp -i $IFACE_LAN --dport 80 -j ACCEPT
 
+	# HTTP local
+	$IPT -A INPUT -p tcp -i $IFACE_LAN --dport 443 -j ACCEPT
+
 	# NTP local
 	$IPT -A INPUT -p udp -i $IFACE_LAN --dport 123 -j ACCEPT
 
@@ -77,8 +80,8 @@ function start {
 	$IPT -A INPUT -p udp -i $IFACE_LAN --dport 834 -j ACCEPT
 
   # Squid 
-  # $IPT -A INPUT -p tcp -i $IFACE_LAN --dport 3128 -j ACCEPT
-  # $IPT -A INPUT -p udp -i $IFACE_LAN --dport 3128 -j ACCEPT
+  #$IPT -A INPUT -p tcp -i $IFACE_LAN --dport 3128 -j ACCEPT
+  #$IPT -A INPUT -p udp -i $IFACE_LAN --dport 3128 -j ACCEPT
 
   # Rediriger toutes les requêtes HTTP - sauf celles vers le serveur lui-même -
   # vers le port 3128 pour obtenir un proxy transparent
@@ -87,6 +90,14 @@ function start {
 
 	# MPD local
 	# $IPT -A INPUT -p tcp -i $IFACE_LAN --dport 8000 -j ACCEPT
+
+  # Facebook 
+  whois -h whois.radb.net '!gAS32934' | tr ' ' '\n' \
+    | sort -n -k1,1 -k2,2 -k3,3 -k4,4 | tail -n+3 > /tmp/fbips.txt
+  FBIPS=$(egrep -v '(^\s+$)' /tmp/fbips.txt)
+  for FBIP in $FBIPS; do
+    $IPT -A FORWARD -p tcp -s $FBIP -j ACCEPT
+  done
 
 	# Enregistrer la trace des paquets rejetés
 	$IPT -A INPUT -j LOG --log-prefix "+++ IPv4 packet rejected +++"

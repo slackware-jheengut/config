@@ -2416,3 +2416,6 @@ lockd     32768/udp  # NFS lockd
 rquotad   32769/tcp  # NFS mountd
 rquotad   32769/udp  # NFS mountd
 
+# Distcc
+distcc   3632/tcp    #Système de compilation distributée C/C++
+distcc   3632/udp    #Système de compilation distributée C/C++
